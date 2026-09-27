@@ -1,0 +1,30 @@
+# Credentials and environment files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Operating-system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Common dependency/build folders
+node_modules/
+dist/
+build/
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
