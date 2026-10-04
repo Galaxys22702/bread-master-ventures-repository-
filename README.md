@@ -4,6 +4,14 @@ Planning and development workspace for ventures being developed jointly by **Bre
 
 This repository keeps the active business plans, research, decisions and nonprofit planning in one organised place without mixing confidential records into a public repo.
 
+## Streetwise relationship
+
+**Bread + Master Ventures operates under the broader Streetwise ecosystem.** Streetwise is the umbrella brand; this repository is the joint venture workspace for Bread and Master and its individual business/community initiatives.
+
+This relationship is a brand and organisational structure only. It does not merge the ventures' legal entities, finances, contracts, licences, customer records, or operational systems. Each venture must remain separately validated and documented where required.
+
+For the current Streetwise technology/connectivity platform, see the [Streetwise Connection repository](https://github.com/Galaxys22702/streetwise-connection-).
+
 ## Venture dashboard
 
 | Area | Current stage | Working documents |
