@@ -1,0 +1,65 @@
+name: Repository validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: repository-validation-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Validate repository text files
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import sys
+
+          failures = []
+          required = [
+              Path("README.md"),
+              Path("SECURITY.md"),
+              Path("CONTRIBUTING.md"),
+              Path("docs/master-plan.md"),
+              Path("docs/roadmap.md"),
+          ]
+
+          for path in required:
+              if not path.is_file():
+                  failures.append(f"missing required file: {path}")
+
+          for path in Path(".").rglob("*"):
+              if not path.is_file() or ".git" in path.parts:
+                  continue
+              if path.suffix.lower() not in {".md", ".txt", ".yml", ".yaml", ".json"}:
+                  continue
+              try:
+                  text = path.read_text(encoding="utf-8")
+              except UnicodeDecodeError:
+                  failures.append(f"not valid UTF-8: {path}")
+                  continue
+              for number, line in enumerate(text.splitlines(), 1):
+                  if line.rstrip() != line:
+                      failures.append(f"trailing whitespace: {path}:{number}")
+                  if line.startswith(("<<<<<<<", "=======", ">>>>>>>")):
+                      failures.append(f"unresolved merge marker: {path}:{number}")
+
+          if failures:
+              print("\n".join(failures), file=sys.stderr)
+              raise SystemExit(1)
+
+          print("Repository validation passed.")
+          PY
